@@ -1,1 +1,510 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N1PPAY - Thanh Toán MoMo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-green: #00ff88;
+            --neon-blue: #0ff0fc;
+            --neon-yellow: #fcec0f;
+            --dark-bg: #0d0d0d;
+            --darker-bg: #080808;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto Mono', monospace, 'Arial', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg), var(--darker-bg));
+            color: #e5e7eb;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .container {
+            max-width: 34rem;
+            width: 100%;
+            background: rgba(17, 24, 39, 0.9);
+            border: 2px solid var(--neon-green);
+            border-radius: 1.25rem;
+            padding: 2.5rem;
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.5);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 60px rgba(0, 255, 136, 0.7);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--neon-green);
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.9);
+            animation: flicker 2.5s infinite;
+        }
+
+        .header p {
+            color: var(--neon-blue);
+            font-size: 1rem;
+            margin-top: 0.75rem;
+            text-shadow: 0 0 10px rgba(15, 240, 252, 0.5);
+        }
+
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% { text-shadow: 0 0 20px rgba(0, 255, 136, 0.9); }
+            20%, 24%, 55% { text-shadow: 0 0 5px rgba(0, 255, 136, 0.3); }
+        }
+
+        .system-time {
+            text-align: center;
+            background: rgba(0, 255, 136, 0.15);
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            margin-bottom: 2rem;
+            color: var(--neon-yellow);
+            font-size: 1rem;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .amount {
+            text-align: center;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .amount p:first-child {
+            color: var(--neon-blue);
+            font-size: 1rem;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .amount p:last-child {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--neon-green);
+            text-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+        }
+
+        .qr-container {
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.4);
+        }
+
+        .qr-container img#qr-code {
+            width: 90%;
+            display: block;
+            margin: 0 auto;
+            border-radius: 0.75rem;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .qr-container img#qr-code:hover {
+            transform: scale(1.05);
+        }
+
+        .divider {
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--neon-green), var(--neon-blue), transparent);
+            margin: 2rem 0;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scaleX(1); }
+            50% { transform: scaleX(1.15); }
+        }
+
+        .momo-info {
+            background: rgba(3, 7, 18, 0.6);
+            border: 2px solid var(--neon-blue);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.4);
+        }
+
+        .momo-info h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--neon-green);
+            text-align: center;
+            text-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 1.5rem;
+        }
+
+        .info-item label {
+            color: var(--neon-blue);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            width: 9rem;
+            flex-shrink: 0;
+            text-shadow: 0 0 5px rgba(15, 240, 252, 0.5);
+        }
+
+        .info-item span {
+            flex: 1;
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--neon-yellow);
+            font-weight: 600;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border-left: 5px solid var(--neon-green);
+            display: flex;
+            align-items: center;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .info-item span:hover {
+            background: rgba(0, 255, 136, 0.25);
+            transform: translateX(5px);
+        }
+
+        .tick-icon {
+            margin-right: 0.75rem;
+            display: inline-flex;
+        }
+
+        .notes {
+            margin-bottom: 2rem;
+        }
+
+        .notes h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+            text-shadow: 0 0 10px rgba(15, 240, 252, 0.7);
+        }
+
+        .notes ul {
+            list-style: none;
+        }
+
+        .notes li {
+            display: flex;
+            align-items: center;
+            color: var(--neon-yellow);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .notes li:hover {
+            color: var(--neon-green);
+            transform: translateX(10px);
+        }
+
+        .notes li svg {
+            position: absolute;
+            left: 0;
+            top: 0.3rem;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+            color: #111827;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: 1rem;
+            border: none;
+            border-radius: 0.75rem;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.6);
+            cursor: pointer;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .confirm-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.8);
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--neon-blue);
+            font-size: 0.85rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--neon-green);
+            opacity: 0.85;
+            text-shadow: 0 0 5px rgba(15, 240, 252, 0.5);
+        }
+
+        .copied-toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--neon-green);
+            color: var(--dark-bg);
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            font-size: 1rem;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.6);
+        }
+
+        .copied-toast.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 1.75rem;
+            }
+
+            .header h1 {
+                font-size: 2.25rem;
+            }
+
+            .amount p:last-child {
+                font-size: 2.25rem;
+            }
+
+            .momo-info h2 {
+                font-size: 1.5rem;
+            }
+
+            .info-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .info-item label {
+                width: 100%;
+                font-size: 0.9rem;
+            }
+
+            .info-item span {
+                width: 100%;
+            }
+
+            .confirm-btn {
+                font-size: 1.25rem;
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>N1PPAY</h1>
+            <p>Thanh toán nhanh qua MoMo</p>
+        </div>
+
+        <!-- System Time -->
+        <div class="system-time">[SYSTEM TIME] <span id="system-time">09:45:27</span></div>
+
+        <!-- Amount -->
+        <div class="amount">
+            <p>SỐ TIỀN THANH TOÁN</p>
+            <p>10.000 VND</p>
+        </div>
+
+        <!-- QR Code -->
+        <div class="qr-container">
+            <img id="qr-code" alt="Mã QR">
+        </div>
+
+        <!-- Divider -->
+        <div class="divider"></div>
+
+        <!-- MoMo Info -->
+        <div class="momo-info">
+            <h2>THÔNG TIN THANH TOÁN MOMO</h2>
+            <div class="info-item">
+                <label>CHỦ TÀI KHOẢN</label>
+                <span class="copyable" data-copy="Tô Hữu Cảnh">
+                    <span class="tick-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    </span>
+                    Tô Hữu Cảnh
+                </span>
+            </div>
+            <div class="info-item">
+                <label>SỐ ĐIỆN THOẠI</label>
+                <span class="copyable" data-copy="0862090062">
+                    <span class="tick-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    </span>
+                    0862090062
+                </span>
+            </div>
+            <div class="info-item">
+                <label>NỘI DUNG</label>
+                <span class="copyable" id="transaction-note" data-copy="">
+                    <span class="tick-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    </span>
+                    <span id="note-text"></span>
+                </span>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="divider"></div>
+
+        <!-- Notes -->
+        <div class="notes">
+            <h2>LƯU Ý HỆ THỐNG</h2>
+            <ul>
+                <li>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    QUÉT MÃ QR HOẶC NHẬP THÔNG TIN ĐỂ THANH TOÁN
+                </li>
+                <li>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    NHẬP CHÍNH XÁC <span style="color: var(--neon-green)">SỐ ĐIỆN THOẠI</span>, <span style="color: var(--neon-green)">SỐ TIỀN</span> VÀ <span style="color: var(--neon-green)">NỘI DUNG</span>
+                </li>
+                <li>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    LƯU LẠI BIÊN LAI GIAO DỊCH ĐỂ ĐỐI CHIẾU
+                </li>
+                <li>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--neon-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    THỜI GIAN XỬ LÝ: 1-5 PHÚT SAU KHI THANH TOÁN
+                </li>
+            </ul>
+        </div>
+
+        <!-- Button -->
+        <button class="confirm-btn">XÁC NHẬN THANH TOÁN</button>
+
+        <!-- Footer -->
+        <div class="footer">[SYSTEM ID: N1P-XT2025] © CYBER PAYMENT GATEWAY</div>
+    </div>
+
+    <!-- Copied Toast -->
+    <div id="copied-toast" class="copied-toast">Đã sao chép!</div>
+
+    <script>
+        // Generate random 5-digit transaction note
+        function generateRandomNote() {
+            return Math.floor(10000 + Math.random() * 90000).toString();
+        }
+
+        // Update system time
+        function updateSystemTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('system-time').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Copy to clipboard with fallback
+        function copyToClipboard(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.write(text).then(() => {
+                    showToast();
+                }).catch(err => {
+                    console.error('Clipboard API failed:', err);
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        // Fallback for older browsers or non-HTTPS
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast();
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // Show toast notification
+        function showToast() {
+            const toast = document.getElementById('copied-toast');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // System time
+            updateSystemTime();
+            setInterval(updateSystemTime, 1000);
+
+            // Transaction note and QR code
+            const note = generateRandomNote();
+            const noteElement = document.getElementById('note-text');
+            noteElement.textContent = note;
+            document.getElementById('transaction-note').setAttribute('data-copy', note);
+
+            // Set QR code URL with random note
+            const qrUrl = `https://momosv3.apimienphi.com/api/QRCode?phone=0862090062&amount=10000¬e=${encodeURIComponent(note)}`;
+            document.getElementById('qr-code').src = qrUrl;
+
+            // Button animation
+            const button = document.querySelector('.confirm-btn');
+            button.addEventListener('click', () => {
+                button.style.transform = 'scale(0.95)';
+                setTimeout(() => button.style.transform = 'scale(1)', 200);
+            });
+
+            // Copy functionality
+            document.querySelectorAll('.copyable').forEach(element => {
+                element.addEventListener('click', () => {
+                    const text = element.getAttribute('data-copy');
+                    if (text) copyToClipboard(text);
+                });
+            });
+        });
+    </script>
+</body>
+  </html>
